@@ -1,10 +1,10 @@
 import { Metadata } from "next"
 import Navigation from "../components/navigation"
 
-export const metadata:Metadata = {
-  title:{
-    template:"%s | Next Movies",
-    default : "Next Movies"
+export const metadata: Metadata = {
+  title: {
+    template: "%s | Next Movies",
+    default: "Next Movies"
   },
   description: 'The best Movies on the best framework',
 }
@@ -17,8 +17,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      {/* <Navigation /> */}
-      {children}
+        {/* <Navigation /> */}
+        {children}
       </body>
     </html>
   )

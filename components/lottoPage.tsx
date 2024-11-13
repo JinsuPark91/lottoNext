@@ -1,11 +1,11 @@
+'use client'
 import { useState, useEffect } from "react";
 import numbers from '../app/store';
 import styled from "styled-components";
-import "./App.css";
 import { useRecoilState } from 'recoil';
 import { data, colorSet } from "../app/data";
 
-function App() {
+function LottoPage(HtmlText) {
     const [total, setTotal] = useState(0);
     const [calArray, setCalArray] = useState([]);
     const [popText, setPopText] = useState('한번에 다뽑기');
@@ -24,6 +24,9 @@ function App() {
         });
         setTotal(total);
         setCalArray(arr);
+
+        console.log('here')
+
     }, []);
 
 
@@ -85,7 +88,7 @@ function App() {
 
 
     return (
-        <>
+        <Wrapper>
             <div>
                 <h1>오대장</h1>
                 <h1> 1등 뽑아 제발</h1>
@@ -105,11 +108,11 @@ function App() {
                 <button onClick={getLottoNumbers}>{popText}</button>
                 <button onClick={clickForDelete}>지우기</button>
             </div>
-        </>
+        </Wrapper>
     );
 }
 
-export default App;
+export default LottoPage;
 const BallContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -133,3 +136,9 @@ const PlusText = styled.span`
   display: flex;
   align-items: center;
 `;
+
+const Wrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
