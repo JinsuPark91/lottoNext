@@ -4,9 +4,9 @@ import Navigation from "../components/navigation"
 export const metadata: Metadata = {
   title: {
     template: "%s | Next Movies",
-    default: "Next Movies"
+    default: "Lotto Captain Oh"
   },
-  description: 'The best Movies on the best framework',
+  description: 'Lotto system for Captain Oh',
 }
 
 export default function RootLayout({
@@ -15,9 +15,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body>
-        {/* <Navigation /> */}
         {children}
       </body>
     </html>

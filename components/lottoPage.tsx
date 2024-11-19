@@ -1,33 +1,37 @@
-'use client'
-import { useState, useEffect } from "react";
-import numbers from '../app/store';
-import styled from "styled-components";
-import { useRecoilState } from 'recoil';
-import { data, colorSet } from "../app/data";
+"use client"
 
-function LottoPage(HtmlText) {
+import styled from "styled-components";
+import { colorSet } from "../app/data";
+import { useEffect, useState } from "react";
+
+export default function LottoPage({ data }) {
+
+
     const [total, setTotal] = useState(0);
     const [calArray, setCalArray] = useState([]);
-    const [popText, setPopText] = useState('한번에 다뽑기');
-    const [lottoNumbers, setLottoNumbers] = useState({});
+    const [selectedNumber, setSelectedNumber] = useState([]);
 
-    const [selectedNumbers, setSelectedNumber] = useRecoilState(numbers);
+    // const getLottoNumbers = () => {
+    //     const numArr = [];
+    //     for (let i = 0; i < 7; i++) {
+    //         numArr.push(getLottoNumber(numArr))
+    //     }
+    //     setSelectedNumber(numArr);
+    //     setPopText('다시 뽑기')
 
+    // }
     useEffect(() => {
         // 숫자별 영역 만들기
         const arr: any = [];
         let total = 0;
         Object.keys(data).forEach((key: string) => {
-            const num: number = data[key];
+            const num: number = data[key] * 1;
             arr.push([key, total, total + num - 1]);
             total += num;
         });
         setTotal(total);
         setCalArray(arr);
-
-        console.log('here')
-
-    }, []);
+    }, [data]);
 
 
 
@@ -49,16 +53,24 @@ function LottoPage(HtmlText) {
         return num;
     };
 
-    // const clickForGettingNumber = () => {
-    //   if (numbers.length > 6) return;
-    //   let newNumber = getLottoNumber();
-    //   const newNumbers = [...numbers];
-    //   newNumbers.push(newNumber);
-    //   setNumbers(newNumbers);
-    // };
+    const getLottoNumbersFiveTimes = () => {
+        const numSet = [];
+        for (let j = 0; j < 5; j++) {
+            let numArr = [];
+            for (let i = 0; i < 7; i++) {
+                numArr.push(getLottoNumber(numArr))
+            }
+            numArr.sort((a, b) => a - b)
+            numSet.push(numArr);
+        }
+
+        setSelectedNumber(numSet);
+        // setPopText('다시 뽑기')
+
+    }
+
 
     const getLottoNumber = (arr: Number[]) => {
-        // if (numbers.length > 6) return;
         let isDuplicated = true;
         let newNumber = 0;
         while (isDuplicated) {
@@ -71,48 +83,39 @@ function LottoPage(HtmlText) {
         return newNumber;
     };
 
-    const clickForDelete = () => {
+
+    const deleteSelectedNumber = () => {
         setSelectedNumber([]);
-    };
-
-    const getLottoNumbers = () => {
-        const numArr = [];
-        for (let i = 0; i < 7; i++) {
-            numArr.push(getLottoNumber(numArr))
-        }
-        console.log(numArr);
-        setSelectedNumber(numArr);
-        setPopText('다시 뽑기')
-
     }
 
 
-    return (
+    return (<Wrapper>
+        <h1>오대장</h1>
+        <h1> 1등 뽑아 제발</h1>
         <Wrapper>
-            <div>
-                <h1>오대장</h1>
-                <h1> 1등 뽑아 제발</h1>
-            </div>
-            <BallContainer>
-                <NumberBall className={selectedNumbers[0]}>{selectedNumbers[0]}</NumberBall>
-                <NumberBall className={selectedNumbers[1]}>{selectedNumbers[1]}</NumberBall>
-                <NumberBall className={selectedNumbers[2]}>{selectedNumbers[2]}</NumberBall>
-                <NumberBall className={selectedNumbers[3]}>{selectedNumbers[3]}</NumberBall>
-                <NumberBall className={selectedNumbers[4]}>{selectedNumbers[4]}</NumberBall>
-                <NumberBall className={selectedNumbers[5]}>{selectedNumbers[5]}</NumberBall>
-                <PlusText> + </PlusText>
-                <NumberBall className={selectedNumbers[6]}>{selectedNumbers[6]}</NumberBall>
-            </BallContainer>
-            <div className="card">
-                {/* <button onClick={clickForGettingNumber}>하나씩 뽑기</button> */}
-                <button onClick={getLottoNumbers}>{popText}</button>
-                <button onClick={clickForDelete}>지우기</button>
-            </div>
+            {
+                selectedNumber.map((numbers, index) => {
+                    return <BallContainer key={index}>
+                        {numbers.map((number, _index) => {
+                            if (index < 6) return <NumberBall key={index + '_' + _index} className={number}>{number}</NumberBall>
+                            else return <>
+                                <PlusText key={'plus_' + index}> + </PlusText>
+                                <NumberBall key={index + '_' + _index} className={number}>{number}</NumberBall>
+                            </>
+                        })}
+                    </BallContainer>
+                })
+            }
         </Wrapper>
-    );
+        <div className="card">
+            {/* <button onClick={clickForGettingNumber}>하나씩 뽑기</button> */}
+            <button onClick={getLottoNumbersFiveTimes}>5회 뽑기</button>
+            <button onClick={deleteSelectedNumber}>지우기</button>
+        </div>
+    </Wrapper>)
 }
 
-export default LottoPage;
+
 const BallContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -141,4 +144,7 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    
 `

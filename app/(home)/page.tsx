@@ -1,7 +1,9 @@
-import Home from "./home";
+import LottoPage from "../../components/lottoPage";
 import { JSDOM } from 'jsdom';
 
-async function getHtmlText() {
+
+// 동행복권 페이지에서 숫자별 당첨횟수 가져오기
+async function getHtmlText() { 
   const response = await fetch("https://www.dhlottery.co.kr/gameResult.do?method=statByNumber", {
     next: { revalidate: 36000 }
   })
@@ -21,6 +23,6 @@ async function getHtmlText() {
 
 export default async function HomePage() {
   const data = await getHtmlText();
-  return <Home data={data}>
-  </Home>
+  return <LottoPage data={data}>
+  </LottoPage>
 }
